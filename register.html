@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - CodeAlpha E-Commerce Store</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- ===================== -->
+    <!-- Header -->
+    <!-- ===================== -->
+
+    <header>
+
+        <h1>CodeAlpha E-Commerce Store</h1>
+
+        <nav>
+
+            <a href="index.html">Home</a>
+
+            <a href="products.html">Products</a>
+
+            <a href="cart.html">Cart</a>
+
+            <a href="login.html">Login</a>
+
+            <a href="register.html">Register</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ===================== -->
+    <!-- Register Form -->
+    <!-- ===================== -->
+
+    <section class="login-container">
+
+        <h2>Create Account</h2>
+
+        <form id="register-form">
+
+            <!-- Full Name -->
+
+            <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+
+
+            <!-- Email -->
+
+            <input type="email" id="email" name="email" placeholder="Email Address" required>
+
+
+            <!-- Password -->
+
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+
+            <!-- Confirm Password -->
+
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+
+
+            <!-- Register Button -->
+
+            <button type="submit">
+                Register
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ===================== -->
+    <!-- Footer -->
+    <!-- ===================== -->
+
+    <footer>
+
+        <p>
+            © 2026 CodeAlpha E-Commerce Store |
+            Developed by Kanthasamy Piratheepan
+        </p>
+
+    </footer>
+
+
+    <!-- ===================== -->
+    <!-- Register JavaScript -->
+    <!-- ===================== -->
+
+    <script>
+
+        const registerForm =
+            document.getElementById("register-form");
+
+
+        registerForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                // Prevent page refresh
+
+                event.preventDefault();
+
+
+                // =====================
+                // Get Form Values
+                // =====================
+
+                const fullName =
+                    document
+                        .getElementById("fullName")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                const confirmPassword =
+                    document
+                        .getElementById("confirmPassword")
+                        .value;
+
+
+                // =====================
+                // Check Empty Fields
+                // =====================
+
+                if (
+                    !fullName ||
+                    !email ||
+                    !password ||
+                    !confirmPassword
+                ) {
+
+                    alert(
+                        "Please fill in all fields."
+                    );
+
+                    return;
+                }
+
+
+                // =====================
+                // Check Password
+                // =====================
+
+                if (
+                    password !==
+                    confirmPassword
+                ) {
+
+                    alert(
+                        "Passwords do not match."
+                    );
+
+                    return;
+                }
+
+
+                // =====================
+                // Send Data to Node.js
+                // =====================
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:3000/register",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        fullName:
+                                            fullName,
+
+                                        email:
+                                            email,
+
+                                        password:
+                                            password
+
+                                    })
+
+                            }
+                        );
+
+
+                    // =====================
+                    // Get Server Response
+                    // =====================
+
+                    const data =
+                        await response.json();
+
+
+                    // =====================
+                    // Registration Failed
+                    // =====================
+
+                    if (!response.ok) {
+
+                        alert(
+                            data.message ||
+                            "Registration failed."
+                        );
+
+                        return;
+                    }
+
+
+                    // =====================
+                    // Registration Success
+                    // =====================
+
+                    alert(
+                        "Registration successful!"
+                    );
+
+
+                    // =====================
+                    // Clear Form
+                    // =====================
+
+                    registerForm.reset();
+
+
+                    // =====================
+                    // Go to Login Page
+                    // =====================
+
+                    window.location.href =
+                        "login.html";
+
+                }
+
+
+                // =====================
+                // Server Connection Error
+                // =====================
+
+                catch (error) {
+
+                    console.error(
+                        "Registration Error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Server connection failed.\n\n" +
+                        "Please make sure Node.js server is running."
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

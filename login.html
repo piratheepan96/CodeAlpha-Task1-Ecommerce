@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - CodeAlpha E-Commerce Store</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <header>
+
+        <h1>CodeAlpha E-Commerce Store</h1>
+
+        <nav>
+
+            <a href="index.html">Home</a>
+
+            <a href="products.html">Products</a>
+
+            <a href="cart.html">Cart</a>
+
+            <a href="login.html">Login</a>
+
+            <a href="register.html">Register</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ========================= -->
+    <!-- LOGIN SECTION -->
+    <!-- ========================= -->
+
+    <section class="login-container">
+
+        <h2>User Login</h2>
+
+        <form id="login-form">
+
+            <!-- EMAIL -->
+
+            <input type="email" id="email" name="email" placeholder="Enter Email" required>
+
+
+            <!-- PASSWORD -->
+
+            <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer>
+
+        <p>
+            © 2026 CodeAlpha E-Commerce Store |
+            Developed by Kanthasamy Piratheepan
+        </p>
+
+    </footer>
+
+
+    <!-- ========================= -->
+    <!-- LOGIN JAVASCRIPT -->
+    <!-- ========================= -->
+
+    <script>
+
+        const loginForm =
+            document.getElementById("login-form");
+
+
+        loginForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                // Stop normal form submission
+                event.preventDefault();
+
+
+                // Get email
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                // Get password
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                // Check fields
+                if (!email || !password) {
+
+                    alert(
+                        "Please enter email and password."
+                    );
+
+                    return;
+                }
+
+
+                try {
+
+                    // ==================================
+                    // SEND LOGIN REQUEST TO NODE.JS
+                    // ==================================
+
+                    const response =
+                        await fetch(
+                            "http://localhost:3000/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    email: email,
+
+                                    password: password
+
+                                })
+                            }
+                        );
+
+
+                    // ==================================
+                    // READ SERVER RESPONSE
+                    // ==================================
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Login Response:",
+                        data
+                    );
+
+
+                    // ==================================
+                    // LOGIN FAILED
+                    // ==================================
+
+                    if (!response.ok) {
+
+                        alert(
+                            data.message ||
+                            "Invalid email or password."
+                        );
+
+                        return;
+                    }
+
+
+                    // ==================================
+                    // LOGIN SUCCESS
+                    // ==================================
+
+                    alert(
+                        "Login successful!"
+                    );
+
+
+                    // ==================================
+                    // SAVE USER
+                    // ==================================
+
+                    localStorage.setItem(
+                        "loggedInUser",
+                        JSON.stringify(data.user)
+                    );
+
+
+                    // ==================================
+                    // GO TO HOME
+                    // ==================================
+
+                    window.location.href =
+                        "index.html";
+
+                }
+
+
+                catch (error) {
+
+                    console.error(
+                        "Login Error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Server connection failed.\n\n" +
+                        "Please make sure Node.js server is running."
+                    );
+
+                }
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>

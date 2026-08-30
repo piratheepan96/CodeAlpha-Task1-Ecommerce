@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Orders - CodeAlpha E-Commerce</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .admin-orders {
+            width: 95%;
+            margin: 40px auto;
+            overflow-x: auto;
+        }
+
+        .admin-orders h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        #orders-table th,
+        #orders-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        #orders-table th {
+            background-color: #087dcc;
+            color: white;
+        }
+
+        #orders-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #orders-table tr:hover {
+            background-color: #e8f4ff;
+        }
+
+        .order-items {
+            text-align: left;
+            min-width: 200px;
+        }
+
+        .order-item {
+            margin-bottom: 8px;
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: bold;
+        }
+
+        .item-price {
+            margin-left: 5px;
+        }
+
+        .item-quantity {
+            margin-left: 5px;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ===================== -->
+    <!-- Header -->
+    <!-- ===================== -->
+
+    <header>
+
+        <h1>CodeAlpha E-Commerce Store</h1>
+
+        <nav>
+
+            <a href="index.html">Home</a>
+
+            <a href="products.html">Products</a>
+
+            <a href="cart.html">Cart</a>
+
+            <a href="login.html">Login</a>
+
+            <a href="register.html">Register</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ===================== -->
+    <!-- Admin Orders -->
+    <!-- ===================== -->
+
+    <section class="admin-orders">
+
+        <h2>Admin Orders</h2>
+
+
+        <table id="orders-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+
+                    <th>Customer Name</th>
+
+                    <th>Email</th>
+
+                    <th>Address</th>
+
+                    <th>Phone</th>
+
+                    <th>Products</th>
+
+                    <th>Total</th>
+
+                    <th>Order Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="orders-body">
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <!-- ===================== -->
+    <!-- Footer -->
+    <!-- ===================== -->
+
+    <footer>
+
+        <p>
+            © 2026 CodeAlpha E-Commerce Store |
+            Developed by Kanthasamy Piratheepan
+        </p>
+
+    </footer>
+
+
+    <!-- ===================== -->
+    <!-- JavaScript -->
+    <!-- ===================== -->
+
+    <script>
+
+        fetch("http://localhost:3000/orders")
+
+            .then(response => {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server Error: " +
+                        response.status
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+
+            .then(orders => {
+
+                const tbody =
+                    document.getElementById("orders-body");
+
+
+                tbody.innerHTML = "";
+
+
+                // =====================
+                // No Orders
+                // =====================
+
+                if (!orders || orders.length === 0) {
+
+                    tbody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="8">
+
+                        No orders found.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+                    return;
+
+                }
+
+
+                // =====================
+                // Display Orders
+                // =====================
+
+                orders.forEach(order => {
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    // =====================
+                    // Products
+                    // =====================
+
+                    let productsHTML = "";
+
+
+                    if (
+                        order.items &&
+                        order.items.length > 0
+                    ) {
+
+                        order.items.forEach(item => {
+
+                            productsHTML += `
+
+                        <div class="order-item">
+
+                            <span class="item-name">
+                                ${item.product_name}
+                            </span>
+
+                            <span class="item-price">
+                                $${Number(item.price).toFixed(2)}
+                            </span>
+
+                            <span class="item-quantity">
+                                × ${item.quantity}
+                            </span>
+
+                        </div>
+
+                    `;
+
+                        });
+
+                    }
+
+                    else {
+
+                        productsHTML =
+                            "No products found";
+
+                    }
+
+
+                    // =====================
+                    // Create Table Row
+                    // =====================
+
+                    row.innerHTML = `
+
+                <td>
+                    ${order.id}
+                </td>
+
+                <td>
+                    ${order.full_name}
+                </td>
+
+                <td>
+                    ${order.email}
+                </td>
+
+                <td>
+                    ${order.address}
+                </td>
+
+                <td>
+                    ${order.phone}
+                </td>
+
+                <td class="order-items">
+                    ${productsHTML}
+                </td>
+
+                <td>
+                    $${Number(order.total).toFixed(2)}
+                </td>
+
+                <td>
+                    ${order.order_date}
+                </td>
+
+            `;
+
+
+                    tbody.appendChild(row);
+
+                });
+
+            })
+
+
+            // =====================
+            // Error Handling
+            // =====================
+
+            .catch(error => {
+
+                console.error(
+                    "Error loading orders:",
+                    error
+                );
+
+
+                const tbody =
+                    document.getElementById("orders-body");
+
+
+                tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="8">
+
+                    Could not load orders.
+
+                    <br><br>
+
+                    Please make sure the Node.js
+                    server is running.
+
+                </td>
+
+            </tr>
+
+        `;
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>
