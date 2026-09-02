@@ -9,16 +9,14 @@
 
     <title>Register - CodeAlpha E-Commerce Store</title>
 
+    <!-- Global stylesheet used across the whole site -->
     <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-    <!-- ===================== -->
-    <!-- Header -->
-    <!-- ===================== -->
-
+    <!-- Site header with logo/title and primary navigation -->
     <header>
 
         <h1>CodeAlpha E-Commerce Store</h1>
@@ -40,10 +38,7 @@
     </header>
 
 
-    <!-- ===================== -->
-    <!-- Register Form -->
-    <!-- ===================== -->
-
+    <!-- Registration section: creates a new user account -->
     <section class="login-container">
 
         <h2>Create Account</h2>
@@ -51,26 +46,16 @@
         <form id="register-form">
 
             <!-- Full Name -->
-
             <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
 
-
             <!-- Email -->
-
             <input type="email" id="email" name="email" placeholder="Email Address" required>
 
-
             <!-- Password -->
-
             <input type="password" id="password" name="password" placeholder="Password" required>
 
-
             <!-- Confirm Password -->
-
             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-
-
-            <!-- Register Button -->
 
             <button type="submit">
                 Register
@@ -81,10 +66,7 @@
     </section>
 
 
-    <!-- ===================== -->
-    <!-- Footer -->
-    <!-- ===================== -->
-
+    <!-- Site footer -->
     <footer>
 
         <p>
@@ -95,10 +77,7 @@
     </footer>
 
 
-    <!-- ===================== -->
-    <!-- Register JavaScript -->
-    <!-- ===================== -->
-
+    <!-- Handles registration form submission and communication with the backend -->
     <script>
 
         const registerForm =
@@ -109,15 +88,11 @@
             "submit",
             async function (event) {
 
-                // Prevent page refresh
-
+                // Prevent the default full-page form submission
                 event.preventDefault();
 
 
-                // =====================
-                // Get Form Values
-                // =====================
-
+                // Get form values
                 const fullName =
                     document
                         .getElementById("fullName")
@@ -144,10 +119,7 @@
                         .value;
 
 
-                // =====================
-                // Check Empty Fields
-                // =====================
-
+                // Make sure no required field was left empty
                 if (
                     !fullName ||
                     !email ||
@@ -163,10 +135,7 @@
                 }
 
 
-                // =====================
-                // Check Password
-                // =====================
-
+                // Make sure the password and confirmation match
                 if (
                     password !==
                     confirmPassword
@@ -180,12 +149,9 @@
                 }
 
 
-                // =====================
-                // Send Data to Node.js
-                // =====================
-
                 try {
 
+                    // Send the new account details to the Node.js/Express backend
                     const response =
                         await fetch(
                             "http://localhost:3000/register",
@@ -216,18 +182,12 @@
                         );
 
 
-                    // =====================
-                    // Get Server Response
-                    // =====================
-
+                    // Parse the JSON response returned by the server
                     const data =
                         await response.json();
 
 
-                    // =====================
-                    // Registration Failed
-                    // =====================
-
+                    // If the server rejected the request, show the returned error
                     if (!response.ok) {
 
                         alert(
@@ -239,38 +199,26 @@
                     }
 
 
-                    // =====================
-                    // Registration Success
-                    // =====================
-
+                    // Registration succeeded
                     alert(
                         "Registration successful!"
                     );
 
 
-                    // =====================
-                    // Clear Form
-                    // =====================
-
+                    // Reset the form fields
                     registerForm.reset();
 
 
-                    // =====================
-                    // Go to Login Page
-                    // =====================
-
+                    // Redirect the new user to the login page
                     window.location.href =
                         "login.html";
 
                 }
 
 
-                // =====================
-                // Server Connection Error
-                // =====================
-
                 catch (error) {
 
+                    // Handle cases where the server is unreachable
                     console.error(
                         "Registration Error:",
                         error
