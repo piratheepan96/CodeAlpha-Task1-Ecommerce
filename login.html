@@ -9,16 +9,14 @@
 
     <title>Login - CodeAlpha E-Commerce Store</title>
 
+    <!-- Global stylesheet used across the whole site -->
     <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
-
+    <!-- Site header with logo/title and primary navigation -->
     <header>
 
         <h1>CodeAlpha E-Commerce Store</h1>
@@ -40,27 +38,18 @@
     </header>
 
 
-    <!-- ========================= -->
-    <!-- LOGIN SECTION -->
-    <!-- ========================= -->
-
+    <!-- Login section: authenticates an existing user -->
     <section class="login-container">
 
         <h2>User Login</h2>
 
         <form id="login-form">
 
-            <!-- EMAIL -->
-
+            <!-- User's registered email address -->
             <input type="email" id="email" name="email" placeholder="Enter Email" required>
 
-
-            <!-- PASSWORD -->
-
+            <!-- User's account password -->
             <input type="password" id="password" name="password" placeholder="Enter Password" required>
-
-
-            <!-- LOGIN BUTTON -->
 
             <button type="submit">
                 Login
@@ -71,10 +60,7 @@
     </section>
 
 
-    <!-- ========================= -->
-    <!-- FOOTER -->
-    <!-- ========================= -->
-
+    <!-- Site footer -->
     <footer>
 
         <p>
@@ -85,10 +71,7 @@
     </footer>
 
 
-    <!-- ========================= -->
-    <!-- LOGIN JAVASCRIPT -->
-    <!-- ========================= -->
-
+    <!-- Handles login form submission and communication with the backend -->
     <script>
 
         const loginForm =
@@ -99,7 +82,7 @@
             "submit",
             async function (event) {
 
-                // Stop normal form submission
+                // Stop the default full-page form submission
                 event.preventDefault();
 
 
@@ -118,7 +101,7 @@
                         .value;
 
 
-                // Check fields
+                // Make sure both fields are filled before contacting the server
                 if (!email || !password) {
 
                     alert(
@@ -131,10 +114,7 @@
 
                 try {
 
-                    // ==================================
-                    // SEND LOGIN REQUEST TO NODE.JS
-                    // ==================================
-
+                    // Send the login credentials to the Node.js/Express backend
                     const response =
                         await fetch(
                             "http://localhost:3000/login",
@@ -157,10 +137,7 @@
                         );
 
 
-                    // ==================================
-                    // READ SERVER RESPONSE
-                    // ==================================
-
+                    // Parse the JSON response returned by the server
                     const data =
                         await response.json();
 
@@ -171,10 +148,7 @@
                     );
 
 
-                    // ==================================
-                    // LOGIN FAILED
-                    // ==================================
-
+                    // If the server rejected the request, show the returned error
                     if (!response.ok) {
 
                         alert(
@@ -186,29 +160,20 @@
                     }
 
 
-                    // ==================================
-                    // LOGIN SUCCESS
-                    // ==================================
-
+                    // Login succeeded
                     alert(
                         "Login successful!"
                     );
 
 
-                    // ==================================
-                    // SAVE USER
-                    // ==================================
-
+                    // Persist the logged-in user's data locally for the session
                     localStorage.setItem(
                         "loggedInUser",
                         JSON.stringify(data.user)
                     );
 
 
-                    // ==================================
-                    // GO TO HOME
-                    // ==================================
-
+                    // Redirect back to the homepage
                     window.location.href =
                         "index.html";
 
@@ -217,6 +182,7 @@
 
                 catch (error) {
 
+                    // Handle cases where the server is unreachable
                     console.error(
                         "Login Error:",
                         error
