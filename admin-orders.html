@@ -9,8 +9,10 @@
 
     <title>Admin Orders - CodeAlpha E-Commerce</title>
 
+    <!-- Global stylesheet used across the whole site -->
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Styles specific to the admin orders table -->
     <style>
         .admin-orders {
             width: 95%;
@@ -84,10 +86,7 @@
 <body>
 
 
-    <!-- ===================== -->
-    <!-- Header -->
-    <!-- ===================== -->
-
+    <!-- Site header with logo/title and primary navigation -->
     <header>
 
         <h1>CodeAlpha E-Commerce Store</h1>
@@ -109,10 +108,7 @@
     </header>
 
 
-    <!-- ===================== -->
-    <!-- Admin Orders -->
-    <!-- ===================== -->
-
+    <!-- Admin panel: displays every order placed by customers -->
     <section class="admin-orders">
 
         <h2>Admin Orders</h2>
@@ -144,7 +140,7 @@
 
             </thead>
 
-
+            <!-- Rows are generated dynamically by JavaScript below -->
             <tbody id="orders-body">
 
             </tbody>
@@ -154,10 +150,7 @@
     </section>
 
 
-    <!-- ===================== -->
-    <!-- Footer -->
-    <!-- ===================== -->
-
+    <!-- Site footer -->
     <footer>
 
         <p>
@@ -168,16 +161,14 @@
     </footer>
 
 
-    <!-- ===================== -->
-    <!-- JavaScript -->
-    <!-- ===================== -->
-
     <script>
 
+        // Fetch all orders from the backend API and render them in the table
         fetch("http://localhost:3000/orders")
 
             .then(response => {
 
+                // If the server responded with an error status, stop and report it
                 if (!response.ok) {
 
                     throw new Error(
@@ -187,6 +178,7 @@
 
                 }
 
+                // Convert the response body into a usable JS array
                 return response.json();
 
             })
@@ -197,14 +189,11 @@
                 const tbody =
                     document.getElementById("orders-body");
 
-
+                // Clear the table before inserting the latest data
                 tbody.innerHTML = "";
 
 
-                // =====================
-                // No Orders
-                // =====================
-
+                // Show a message if there are no orders to display
                 if (!orders || orders.length === 0) {
 
                     tbody.innerHTML = `
@@ -226,20 +215,14 @@
                 }
 
 
-                // =====================
-                // Display Orders
-                // =====================
-
+                // Build a table row for each order returned by the API
                 orders.forEach(order => {
 
                     const row =
                         document.createElement("tr");
 
 
-                    // =====================
-                    // Products
-                    // =====================
-
+                    // Build the list of purchased products for this order
                     let productsHTML = "";
 
 
@@ -276,16 +259,14 @@
 
                     else {
 
+                        // Fallback when an order has no associated items
                         productsHTML =
                             "No products found";
 
                     }
 
 
-                    // =====================
-                    // Create Table Row
-                    // =====================
-
+                    // Fill the row with the order's customer info and totals
                     row.innerHTML = `
 
                 <td>
@@ -322,7 +303,7 @@
 
             `;
 
-
+                    // Append the finished row to the table body
                     tbody.appendChild(row);
 
                 });
@@ -330,10 +311,7 @@
             })
 
 
-            // =====================
-            // Error Handling
-            // =====================
-
+            // Handle network failures or unexpected errors from the fetch call
             .catch(error => {
 
                 console.error(
@@ -345,7 +323,7 @@
                 const tbody =
                     document.getElementById("orders-body");
 
-
+                // Let the admin know the data failed to load and why
                 tbody.innerHTML = `
 
             <tr>
