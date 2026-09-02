@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
-
+    <!-- Global stylesheet used across the whole site -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
+<!-- Site header with logo/title and primary navigation -->
 <header>
     <h1>CodeAlpha E-Commerce Store</h1>
-
     <nav>
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
@@ -20,25 +19,23 @@
         <a href="register.html">Register</a>
     </nav>
 </header>
-
+<!-- Shopping cart section: lists items added by the user and shows the total -->
 <section class="products">
-
     <h2>Shopping Cart</h2>
-
+    <!-- Cart items are rendered here dynamically by script.js -->
     <div id="cart-items">
         <p>Your cart is empty.</p>
     </div>
-
+    <!-- Running total, updated dynamically as items change -->
     <h2>Total: $<span id="total-price">0</span></h2>
-
+    <!-- Takes the user to the checkout page -->
     <button id="checkout-btn">Proceed to Checkout</button>
-
 </section>
+<!-- Site footer -->
 <footer>
 <p>© 2026 CodeAlpha E-Commerce Store | Developed by Kanthasamy Piratheepan</p>
 </footer>
-
+<!-- Handles cart logic: loading items, updating totals, checkout navigation -->
 <script src="js/script.js"></script>
-
 </body>
 </html>
