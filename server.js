@@ -7,9 +7,7 @@ const app = express();
 const PORT = 3000;
 
 
-// ==================================================
-// MIDDLEWARE
-// ==================================================
+// Middleware setup
 
 app.use(cors());
 
@@ -20,9 +18,7 @@ app.use(express.urlencoded({
 }));
 
 
-// ==================================================
-// MYSQL CONNECTION
-// ==================================================
+// MySQL connection configuration
 
 const db = mysql.createConnection({
 
@@ -37,9 +33,7 @@ const db = mysql.createConnection({
 });
 
 
-// ==================================================
-// MYSQL CONNECT
-// ==================================================
+// Connect to the MySQL database
 
 db.connect(function (err) {
 
@@ -63,9 +57,7 @@ db.connect(function (err) {
 });
 
 
-// ==================================================
-// TEST SERVER
-// ==================================================
+// Simple route to confirm the server is running
 
 app.get("/", function (req, res) {
 
@@ -76,9 +68,7 @@ app.get("/", function (req, res) {
 });
 
 
-// ==================================================
-// GET PRODUCTS
-// ==================================================
+// Get all products from the database
 
 app.get("/products", function (req, res) {
 
@@ -118,9 +108,7 @@ app.get("/products", function (req, res) {
 });
 
 
-// ==================================================
-// REGISTER
-// ==================================================
+// Register a new user account
 
 app.post("/register", function (req, res) {
 
@@ -137,7 +125,7 @@ app.post("/register", function (req, res) {
     );
 
 
-    // Check fields
+    // Make sure all required fields were provided
 
     if (
         !fullName ||
@@ -157,7 +145,7 @@ app.post("/register", function (req, res) {
     }
 
 
-    // Check existing email
+    // Check whether the email is already registered
 
     const checkSql = `
         SELECT id
@@ -209,7 +197,7 @@ app.post("/register", function (req, res) {
             }
 
 
-            // Insert user
+            // Insert the new user into the database
 
             const insertSql = `
                 INSERT INTO users
@@ -285,9 +273,7 @@ app.post("/register", function (req, res) {
 });
 
 
-// ==================================================
-// LOGIN
-// ==================================================
+// Log in an existing user
 
 app.post("/login", function (req, res) {
 
@@ -303,7 +289,7 @@ app.post("/login", function (req, res) {
     );
 
 
-    // Check fields
+    // Make sure both fields were provided
 
     if (
         !email ||
@@ -360,7 +346,7 @@ app.post("/login", function (req, res) {
             }
 
 
-            // User not found
+            // No user found with this email
 
             if (result.length === 0) {
 
@@ -380,7 +366,7 @@ app.post("/login", function (req, res) {
                 result[0];
 
 
-            // Check password
+            // Verify the password matches
 
             if (
                 password !==
@@ -435,9 +421,7 @@ app.post("/login", function (req, res) {
 });
 
 
-// ==================================================
-// GET ORDERS
-// ==================================================
+// Get all orders along with their items
 
 app.get("/orders", function (req, res) {
 
@@ -481,7 +465,7 @@ app.get("/orders", function (req, res) {
             }
 
 
-            // No orders
+            // No orders exist yet
 
             if (
                 orders.length === 0
@@ -492,7 +476,7 @@ app.get("/orders", function (req, res) {
             }
 
 
-            // Get order IDs
+            // Collect all order IDs so their items can be fetched together
 
             const orderIds =
                 orders.map(
@@ -502,7 +486,7 @@ app.get("/orders", function (req, res) {
                 );
 
 
-            // Get order items
+            // Get every item that belongs to these orders
 
             const itemSql = `
                 SELECT
@@ -548,7 +532,7 @@ app.get("/orders", function (req, res) {
                     }
 
 
-                    // Combine orders and items
+                    // Attach each order's matching items to it
 
                     const finalOrders =
                         orders.map(
@@ -613,9 +597,7 @@ app.get("/orders", function (req, res) {
 });
 
 
-// ==================================================
-// PLACE ORDER
-// ==================================================
+// Place a new order and save its items
 
 app.post("/orders", function (req, res) {
 
@@ -638,7 +620,7 @@ app.post("/orders", function (req, res) {
     );
 
 
-    // Validate fields
+    // Validate that all required fields and a non-empty cart were sent
 
     if (
         !fullName ||
@@ -662,9 +644,7 @@ app.post("/orders", function (req, res) {
     }
 
 
-    // ==================================================
-    // INSERT ORDER
-    // ==================================================
+    // Insert the order's main details first
 
     const orderSql = `
         INSERT INTO orders
@@ -718,15 +698,13 @@ app.post("/orders", function (req, res) {
             }
 
 
-            // New order ID
+            // ID of the order that was just created
 
             const orderId =
                 result.insertId;
 
 
-            // ==================================================
-            // PREPARE ORDER ITEMS
-            // ==================================================
+            // Prepare each cart item for insertion into order_items
 
             const itemSql = `
                 INSERT INTO order_items
@@ -769,9 +747,7 @@ app.post("/orders", function (req, res) {
                 );
 
 
-            // ==================================================
-            // INSERT ORDER ITEMS
-            // ==================================================
+            // Save all order items linked to this order
 
             db.query(
 
@@ -809,9 +785,7 @@ app.post("/orders", function (req, res) {
                     );
 
 
-                    // ==================================================
-                    // SUCCESS
-                    // ==================================================
+                    // Order and its items were saved successfully
 
                     res.status(201).json({
 
@@ -834,9 +808,7 @@ app.post("/orders", function (req, res) {
 });
 
 
-// ==================================================
-// START SERVER
-// ==================================================
+// Start the Express server
 
 app.listen(
     PORT,
