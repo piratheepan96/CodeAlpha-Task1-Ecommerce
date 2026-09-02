@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - CodeAlpha E-Commerce</title>
+    <!-- Global stylesheet used across the whole site -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
+<!-- Site header with logo/title and primary navigation -->
 <header>
     <h1>CodeAlpha E-Commerce Store</h1>
-
     <nav>
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
@@ -20,13 +19,11 @@
         <a href="register.html">Register</a>
     </nav>
 </header>
-
+<!-- Checkout section: collects customer details and confirms the order -->
 <section class="checkout-container">
-
     <h2>Checkout</h2>
-
+    <!-- Order form, submitted via script.js to place the order -->
     <form id="checkout-form">
-
         <label for="fullname">Full Name</label>
         <input type="text" id="fullname" name="fullname" required>
 
@@ -39,19 +36,17 @@
         <label for="phone">Phone Number</label>
         <input type="text" id="phone" name="phone" required>
 
+        <!-- Order total, populated dynamically from the cart -->
         <h3>Order Total: $<span id="checkout-total">0</span></h3>
 
         <button type="submit">Place Order</button>
-
     </form>
-
 </section>
-
+<!-- Site footer -->
 <footer>
     <p>© 2026 CodeAlpha E-Commerce Store | Developed by Kanthasamy Piratheepan</p>
 </footer>
-
+<!-- Handles form submission, order total calculation, and order placement -->
 <script src="js/script.js"></script>
-
 </body>
 </html>
